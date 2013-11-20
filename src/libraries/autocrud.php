@@ -25,11 +25,9 @@ class AutoCrud
 	protected $relations = array();
 	protected $validation_rules = array();
 	protected $default_values = array();
-	public $per_page = 10;
 
 	protected $item_view;
 	protected $print_view;
-	public $form_view = null;
 
 	protected $ajax = false;
 
@@ -58,6 +56,8 @@ class AutoCrud
 	public $query;
 
 	public $base_segment = 2;
+	public $form_view = null;
+	public $per_page = 10;
 
 	public function __construct($table_name = null, $connection = null)
 	{
@@ -76,6 +76,12 @@ class AutoCrud
 		}
 	}
 
+
+	/**
+	 * Sets the database connection for current instance.
+	 *
+	 * @return void
+	 */
 	public function set_connection($connection)
 	{
 		$this->connection = $connection;
@@ -92,7 +98,7 @@ class AutoCrud
 	}
 
 	/**
-	 * Sets the table name for this instance, and exracts its table info.
+	 * Sets the table name for this instance, and extracts its table info.
 	 *
 	 * @return void
 	 */
@@ -513,6 +519,9 @@ class AutoCrud
 		return Redirect::to($next_url);
 	}
 
+	/**
+	 * Creates per-item view.
+	 */
 	protected function create_view($id)
 	{
 
@@ -539,6 +548,9 @@ class AutoCrud
 
 	}
 
+	/**
+	 * Displays print layout.
+	 */
 	protected function create_print($id)
 	{
 
@@ -1023,6 +1035,9 @@ class AutoCrud
 			$this->data['title_edit'] = $edit;
 	}
 
+	/**
+	 * Removes a column from being displayed on table.
+	 */
 	public function unset_columns($columns_to_unset)
 	{
 		$new_columns = array();
@@ -1036,6 +1051,9 @@ class AutoCrud
 		$this->data['columns'] = $new_columns;
 	}
 
+	/**
+	 * Removes a field from being displayed on form.
+	 */
 	public function unset_fields($fields_to_unset)
 	{
 		foreach ($this->data['fields'] as $field)
@@ -1047,11 +1065,17 @@ class AutoCrud
 		$this->data['fields'] = $new_columns;
 	}
 
+	/**
+	 * Enables per-item view.
+	 */
 	public function enable_view()
 	{
 		$this->data['enable_view'] = true;
 	}
 
+	/**
+	 * Sets default value of a field. Only affects forms.
+	 */
 	public function set_default_value($field_name, $value, $mode = 0)
 	{
 		// modes: 0 = hidden, 1 = shown but not editable, 2 = editable
@@ -1061,21 +1085,33 @@ class AutoCrud
 		$this->default_values[$field_name] = $value;
 	}
 
+	/**
+	 * Callback for a field to be displayed on table.
+	 */
 	public function callback_column($column_name, $func)
 	{
 		$this->callback_column[$column_name] = $func;
 	}
 
+	/**
+	 * Callback for a field to be displayed on add form.
+	 */
 	public function callback_add($field_name, $func)
 	{
 		$this->callback_add[$column_name] = $func;
 	}
 
+	/**
+	 * Callback for a field to be displayed on edit form.
+	 */
 	public function callback_edit($field_name, $func)
 	{
 		$this->callback_edit[$column_name] = $func;
 	}
 
+	/**
+	 * Callback for a field to be displayed on add and edit form.
+	 */
 	public function callback_field($field_name, $func)
 	{
 		$this->callback_add($field_name, $func);
